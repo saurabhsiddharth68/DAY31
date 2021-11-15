@@ -1,0 +1,345 @@
+Employee Payroll Services
+#UC1
+mysql> CREATE DATABASE Payroll_Services;
+Query OK, 1 row affected (0.05 sec)
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| company            |
+| information_schema |
+| mysql              |
+| payroll_services   |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+mysql> use payroll_services;
+Database changed
+mysql> select database();
++------------------+
+| database()       |
++------------------+
+| payroll_services |
++------------------+
+1 row in set (0.00 sec)
+
+#UC2
+
+mysql> create table employee_payroll(
+    -> id INT unsigned NOT NULL AUTO_INCREMENT,
+    -> name VARCHAR(150) NOT NULL,
+    -> salary Double NOT NULL,
+    -> PRIMARY KEY(id)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> describe employee_payroll;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(150) | NO   |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+3 rows in set (0.04 sec)
+
+mysql> ALTER TABLE employee_payroll ADD start Date NOT NULL;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee_payroll;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(150) | NO   |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.04 sec)
+
+#UC3
+mysql> insert into employee_payroll(name,salary,start)VALUES
+    -> ('Samir',100000,'2018-01-05'),
+    -> ('Nikhil',150000,'2019-02-15'),
+    -> ('Aryan',125000,'2019-09-25');
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+#UC4
+
+mysql> select * from employee_payroll;
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  1 | Samir  | 100000 | 2018-01-05 |
+|  2 | Nikhil | 150000 | 2019-02-15 |
+|  3 | Aryan  | 125000 | 2019-09-25 |
++----+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+#UC5
+mysql> select salary FROM employee_payroll where name = 'Samir';
++--------+
+| salary |
++--------+
+| 100000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee_payroll where start BETWEEN CAST('2018-01-01' As Date) AND DATE (NOW());
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  1 | Samir  | 100000 | 2018-01-05 |
+|  2 | Nikhil | 150000 | 2019-02-15 |
+|  3 | Aryan  | 125000 | 2019-09-25 |
++----+--------+--------+------------+
+3 rows in set (0.04 sec)
+
+#UC6
+mysql> update employee_payroll set gender = 'M' where name ='Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set gender = 'M' where name ='Nikhil' or name = 'Aryan';
+Query OK, 2 rows affected (0.04 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> update employee_payroll set salary = 300000 where name ='Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+#UC7
+mysql> select AVG(salary) from employee_payroll where gender = 'M' GROUP BY gender;
++--------------------+
+| AVG(salary)        |
++--------------------+
+| 191666.66666666666 |
++--------------------+
+1 row in set (0.04 sec)
+
+mysql> select SUM(salary) from employee_payroll where gender = 'M' GROUP BY gender;
++-------------+
+| SUM(salary) |
++-------------+
+|      575000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select MIN(salary) from employee_payroll where gender = 'M' GROUP BY gender;
++-------------+
+| MIN(salary) |
++-------------+
+|      125000 |
++-------------+
+1 row in set (0.04 sec)
+
+mysql> select MAX(salary) from employee_payroll where gender = 'M' GROUP BY gender;
++-------------+
+| MAX(salary) |
++-------------+
+|      300000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select COUNT(salary) from employee_payroll where gender = 'M' GROUP BY gender;
++---------------+
+| COUNT(salary) |
++---------------+
+|             3 |
++---------------+
+1 row in set (0.00 sec)
+
+#UC8
+mysql> ALTER TABLE employee_payroll ADD phone int(10);
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+mysql> ALTER TABLE employee_payroll ADD address VARCHAR(150);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update employee_payroll set phone = 1425367892 where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set address = 'Gazipur' where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set phone = 1425367451 where name = 'Nikhil';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set phone = 1425361785 where name = 'Aryan';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set address = 'Noida' where name = 'Nikhil';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set address = 'Sultanpur' where name = 'Aryan';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> describe employee_payroll;
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id      | int unsigned | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(150) | NO   |     | NULL    |                |
+| gender  | char(1)      | YES  |     | NULL    |                |
+| salary  | double       | NO   |     | NULL    |                |
+| start   | date         | NO   |     | NULL    |                |
+| phone   | int          | YES  |     | NULL    |                |
+| address | varchar(150) | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+7 rows in set (0.05 sec)
+
+mysql> select * employee_payroll;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'employee_payroll' at line 1
+mysql> select * from employee_payroll;
++----+--------+--------+--------+------------+------------+-----------+
+| id | name   | gender | salary | start      | phone      | address   |
++----+--------+--------+--------+------------+------------+-----------+
+|  1 | Samir  | M      | 300000 | 2018-01-05 | 1425367892 | Gazipur   |
+|  2 | Nikhil | M      | 150000 | 2019-02-15 | 1425367451 | Noida     |
+|  3 | Aryan  | M      | 125000 | 2019-09-25 | 1425361785 | Sultanpur |
++----+--------+--------+--------+------------+------------+-----------+
+3 rows in set (0.00 sec)
+
+#UC9
+mysql> ALTER TABLE employee_payroll ADD basic_pay int(5);
+Query OK, 0 rows affected, 1 warning (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> update employee_payroll set basic_pay = 5000 where name = 'Aryan';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set basic_pay = 4500 where name = 'Nikhil';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set basic_pay = 4000 where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> ALTER TABLE employee_payroll ADD deduction int(5);
+Query OK, 0 rows affected, 1 warning (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> ALTER TABLE employee_payroll ADD taxable_pay int(5);
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> ALTER TABLE employee_payroll ADD income_tax int(5);
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> ALTER TABLE employee_payroll ADD net_pay int(5);
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> update employee_payroll set deduction = 2000 where name = 'Samir';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set deduction = 2200 where name = 'Nikhil';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set deduction = 2300 where name = 'Aryan';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set taxable_pay = 300 where name = 'Aryan';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set taxable_pay = 500 where name = 'Nikhil';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set taxable_pay = 500 where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set income_tax = 800 where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set income_tax = 700 where name = 'Nikhil';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set income_tax = 750 where name = 'Aryan';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set net_pay = 750 where name = 'Aryan';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set net_pay = 700 where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set net_pay = 800 where name = 'Nikhil';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+--------+--------+--------+------------+------------+-----------+-----------+-----------+-------------+------------+---------+
+| id | name   | gender | salary | start      | phone      | address   | basic_pay | deduction | taxable_pay | income_tax | net_pay |
++----+--------+--------+--------+------------+------------+-----------+-----------+-----------+-------------+------------+---------+
+|  1 | Samir  | M      | 300000 | 2018-01-05 | 1425367892 | Gazipur   |      4000 |      2000 |         500 |        800 |     700 |
+|  2 | Nikhil | M      | 150000 | 2019-02-15 | 1425367451 | Noida     |      4500 |      2200 |         500 |        700 |     800 |
+|  3 | Aryan  | M      | 125000 | 2019-09-25 | 1425361785 | Sultanpur |      5000 |      2300 |         300 |        750 |     750 |
++----+--------+--------+--------+------------+------------+-----------+-----------+-----------+-------------+------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employee_payroll where name = 'Nikhil';
++----+--------+--------+--------+------------+------------+---------+-----------+-----------+-------------+------------+---------+
+| id | name   | gender | salary | start      | phone      | address | basic_pay | deduction | taxable_pay | income_tax | net_pay |
++----+--------+--------+--------+------------+------------+---------+-----------+-----------+-------------+------------+---------+
+|  2 | Nikhil | M      | 150000 | 2019-02-15 | 1425367451 | Noida   |      4500 |      2200 |         500 |        700 |     800 |
++----+--------+--------+--------+------------+------------+---------+-----------+-----------+-------------+------------+---------+
+1 row in set (0.00 sec)
+
+mysql> ALTER TABLE employee_payroll ADD department VARCHAR(25) AFTER address;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update employee_payroll set department = 'CSE' where name = 'Nikhil';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set department = 'CSE' where name = 'Samir';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set department = 'Accounting' where name = 'Aryan';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+mysql> select * from employee_payroll;
++----+--------+--------+--------+------------+------------+-----------+------------+-----------+-----------+-------------+------------+---------+
+| id | name   | gender | salary | start      | phone      | address   | department | basic_pay | deduction | taxable_pay | income_tax | net_pay |
++----+--------+--------+--------+------------+------------+-----------+------------+-----------+-----------+-------------+------------+---------+
+|  1 | Samir  | M      | 300000 | 2018-01-05 | 1425367892 | Gazipur   | CSE        |      4000 |      2000 |         500 |        800 |     700 |
+|  2 | Nikhil | M      | 150000 | 2019-02-15 | 1425367451 | Noida     | CSE        |      4500 |      2200 |         500 |        700 |     800 |
+|  3 | Aryan  | M      | 125000 | 2019-09-25 | 1425361785 | Sultanpur | Accounting |      5000 |      2300 |         300 |        750 |     750 |
++----+--------+--------+--------+------------+------------+-----------+------------+-----------+-----------+-------------+------------+---------+
+3 rows in set (0.04 sec)
+
+#UC10
+mysql> create table employee_department(
+    -> employee_id int not null,
+    -> department VARCHAR(25) NOT NULL,
+    -> PRIMARY KEY(department)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+#UC11
