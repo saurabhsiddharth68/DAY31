@@ -343,3 +343,80 @@ mysql> create table employee_department(
 Query OK, 0 rows affected (0.06 sec)
 
 #UC11
+
+mysql> insert into employee_department(
+    -> employee_id,department)
+    -> values
+    -> (1,"CSE"),
+    -> (2,"Accounting");
+    Query OK, 2 rows affected (23.27 sec)
+    Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_department;
++-------------+------------+
+| employee_id | department |
++-------------+------------+
+|           2 | Accounting |
+|           1 | CSE        |
++-------------+------------+
+2 rows in set (0.00 sec)
+
+#UC12
+
+mysql> alter table employee_payroll add foreign key(department) references employee_department(department);
+Query OK, 3 rows affected (0.15 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM employee_payroll inner join employee_department on employee_payroll.department = employee_department.department\G;
+*************************** 1. row ***************************
+         id: 3
+       name: Aryan
+     gender: M
+     salary: 125000
+      start: 2019-09-25
+      phone: 1425361785
+    address: Sultanpur
+ department: Accounting
+  basic_pay: 5000
+  deduction: 2300
+taxable_pay: 300
+ income_tax: 750
+    net_pay: 750
+employee_id: 2
+ department: Accounting
+*************************** 2. row ***************************
+         id: 1
+       name: Samir
+     gender: M
+     salary: 300000
+      start: 2018-01-05
+      phone: 1425367892
+    address: Gazipur
+ department: CSE
+  basic_pay: 4000
+  deduction: 2000
+taxable_pay: 500
+ income_tax: 800
+    net_pay: 700
+employee_id: 1
+ department: CSE
+*************************** 3. row ***************************
+         id: 2
+       name: Nikhil
+     gender: M
+     salary: 150000
+      start: 2019-02-15
+      phone: 1425367451
+    address: Noida
+ department: CSE
+  basic_pay: 4500
+  deduction: 2200
+taxable_pay: 500
+ income_tax: 700
+    net_pay: 800
+employee_id: 1
+ department: CSE
+3 rows in set (0.04 sec)
+
+ERROR:
+No query specified
