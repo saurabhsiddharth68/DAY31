@@ -9,7 +9,7 @@ public class Employee_payroll {
     public static void main(String[] args) {
         Connection connection = null;
         Statement stmt = null;
-        String query = "select * from payroll_services.employee_payroll where id=2";
+        String query = "update payroll_services.employee_payroll set salary=300000 where id=2";
         try {
             connection = null;
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -17,18 +17,9 @@ public class Employee_payroll {
             System.out.println("Connection establish");
             stmt = connection.createStatement();
             System.out.println("Platform Created");
-            stmt.executeQuery(query);
-            ResultSet resultSet = stmt.getResultSet();
-            if (resultSet.next()){
-                System.out.println("ID = "+ resultSet.getInt("id"));
-                System.out.println("Name = "+ resultSet.getString("name"));
-                System.out.println("Gender = "+ resultSet.getString("gender"));
-                System.out.println("Salary = "+ resultSet.getInt("salary"));
-                System.out.println("Phone = "+ resultSet.getInt("phone"));
-                System.out.println("Address = "+ resultSet.getString("address"));
-                System.out.println("Department = "+ resultSet.getString("department"));
-            }
-            System.out.println("Data Inserted");
+            stmt.executeUpdate(query);
+
+            System.out.println("Update salary of Nikhil to 300000 successfully");
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         } finally {
